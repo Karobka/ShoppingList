@@ -30,6 +30,7 @@ app.get('/items', function(req, res) {
 
 app.listen(process.env.PORT || 8080);
 
+/** POST **/
 app.post('/items', jsonParser, function (req, res) {
     if (!req.body) {
         return res.sendStatus(400);
@@ -38,25 +39,29 @@ app.post('/items', jsonParser, function (req, res) {
     res.status(201).json(item);
 });
 
+/** DELETE **/
 app.delete('/items/:id', function (req, res) {
+    var id = parseInt(req.params.id);
     if (!req.params.id) {
         return res.sendStatus(400);
     }
-    console.log(req.params.id);
-    console.log(Storage.length);
-    for (var i = 0; i < Storage.length; i++) {
-        console.log(Storage[i].id);
-        if (Storage[i].id == req.params.id) {
-            Storage.splice(i, 1);
-            break;
+    for (var i = 0; i < storage.items.length; i++) {
+        if (id === storage.items[i].id) {
+            storage.items.splice(i, 1);
         }
     }
-    res.status(201).json(req.params.name);
+    console.log(req.params.id);
+    
+    res.status(200).json(storage.items);
 });
 
+/** PUT **/
 app.put('items/:id', function (req, res) {
     if (!req.id) {
         return res.sendStatus(400);
     }
     
 });
+
+exports.app = app;
+exports.storage = storage;
